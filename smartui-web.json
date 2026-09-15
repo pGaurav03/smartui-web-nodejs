@@ -1,0 +1,17 @@
+[
+  {
+    "name": "sample-app-home",
+    "url": "https://ecommerce-playground.lambdatest.io/",
+    "waitForTimeout": 2000
+  },
+  {
+    "name": "sample-app-category-page",
+    "url": "https://ecommerce-playground.lambdatest.io/index.php?route=product/category&path=33_57",
+    "waitForTimeout": 2000
+  },
+  {
+    "name": "sample-app-product-page",
+    "url": "https://ecommerce-playground.lambdatest.io/index.php?route=product/product&product_id=42",
+    "waitForTimeout": 2000
+  }
+]

@@ -1,6 +1,7 @@
 node_modules/
 .env
 .DS_Store
+.smartui.log
 mochawesome-report/
 .smartui-output/
 npm-debug.log*
