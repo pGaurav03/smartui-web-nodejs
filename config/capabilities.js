@@ -117,13 +117,15 @@ const MOBILE = [
     },
   },
   {
-    // Real iPad — checks a distinct resolution/form factor
+    // Real iPad — checks a distinct resolution/form factor.
+    // No platformVersion pinned: this device/OS combo isn't guaranteed to
+    // exist in LambdaTest's real-device pool, so let it pick whatever OS
+    // version it has available for this device.
     testName: "iOS-iPadAir-Safari",
     browserName: "Safari",
     "LT:Options": {
       platformName: "iOS",
       deviceName: "iPad Air 2022",
-      platformVersion: "16",
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
