@@ -3,6 +3,10 @@
  * Each entry is a W3C desired-capabilities object sent to the
  * LambdaTest Selenium hub. Add or remove entries here to change coverage —
  * nothing else in the test needs to change.
+ *
+ * `browserName` is required on every entry (including mobile) — the
+ * selenium-webdriver Builder throws locally ("did you forget to call
+ * forBrowser()?") if it's missing, before it ever reaches LambdaTest.
  */
 
 const DESKTOP = [
@@ -15,6 +19,7 @@ const DESKTOP = [
       resolution: "1920x1080",
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
@@ -26,6 +31,7 @@ const DESKTOP = [
       resolution: "1366x768",
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
@@ -37,6 +43,7 @@ const DESKTOP = [
       resolution: "1920x1080",
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
@@ -48,6 +55,7 @@ const DESKTOP = [
       resolution: "1920x1080",
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
@@ -60,6 +68,7 @@ const DESKTOP = [
       resolution: "1920x1080",
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
 ];
@@ -68,6 +77,7 @@ const MOBILE = [
   {
     // Real Android device — mobile Chrome
     testName: "Android-GalaxyS23-Chrome",
+    browserName: "Chrome",
     "LT:Options": {
       platformName: "Android",
       deviceName: "Galaxy S23",
@@ -75,11 +85,13 @@ const MOBILE = [
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
     // Real Android tablet — checks a distinct resolution/form factor
     testName: "Android-GalaxyTabS8-Chrome",
+    browserName: "Chrome",
     "LT:Options": {
       platformName: "Android",
       deviceName: "Galaxy Tab S8",
@@ -87,11 +99,13 @@ const MOBILE = [
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
     // Real iOS device — mobile Safari
     testName: "iOS-iPhone14-Safari",
+    browserName: "Safari",
     "LT:Options": {
       platformName: "iOS",
       deviceName: "iPhone 14",
@@ -99,11 +113,13 @@ const MOBILE = [
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
   {
     // Real iPad — checks a distinct resolution/form factor
     testName: "iOS-iPadAir-Safari",
+    browserName: "Safari",
     "LT:Options": {
       platformName: "iOS",
       deviceName: "iPad Air 2022",
@@ -111,6 +127,7 @@ const MOBILE = [
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
+      visual: true,
     },
   },
 ];
