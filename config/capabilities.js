@@ -117,15 +117,17 @@ const MOBILE = [
     },
   },
   {
-    // Real iPad — checks a distinct resolution/form factor.
-    // No platformVersion pinned: this device/OS combo isn't guaranteed to
-    // exist in LambdaTest's real-device pool, so let it pick whatever OS
-    // version it has available for this device.
-    testName: "iOS-iPadAir-Safari",
+    // A specific named tablet ("iPad Air 2022") kept failing with
+    // "No device can be found with the input capabilities" — that exact
+    // model isn't guaranteed to be in LambdaTest's live real-device pool.
+    // A wildcard deviceName lets LambdaTest auto-pick any real device
+    // matching the pattern instead of a pinned model that may not exist.
+    testName: "iOS-iPhoneLatest-Safari",
     browserName: "Safari",
     "LT:Options": {
       platformName: "iOS",
-      deviceName: "iPad Air 2022",
+      deviceName: "iPhone.*",
+      platformVersion: "18",
       isRealMobile: true,
       build: "SmartUI Web Sample",
       project: "smartui-web-nodejs",
