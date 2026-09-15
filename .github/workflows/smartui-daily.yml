@@ -1,0 +1,47 @@
+name: SmartUI Daily Visual Regression
+
+on:
+  schedule:
+    # 09:00 IST = 03:30 UTC, every day
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+    inputs:
+      mark_baseline:
+        description: "Mark this run's snapshots as the new baseline"
+        type: boolean
+        default: false
+
+concurrency:
+  group: smartui-daily
+  cancel-in-progress: false
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      LT_USERNAME: ${{ secrets.LT_USERNAME }}
+      LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+      PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      SAMPLE_URL: ${{ vars.SAMPLE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run SmartUI visual tests (full matrix — Chrome/Edge/Firefox/WebKit + real Android/iOS)
+        run: |
+          if [ "${{ github.event.inputs.mark_baseline }}" = "true" ]; then
+            echo "Marking this build as the new baseline"
+            npm run baseline
+          else
+            npm test
+          fi

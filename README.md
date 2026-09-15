@@ -67,9 +67,10 @@ SAMPLE_URL=https://ecommerce-playground.lambdatest.io/
 Mode A — SDK/exec (real cloud browsers + real devices, interactive):
 
 ```bash
-npm test               # Full matrix: all desktop browsers + real Android/iOS devices
-npm run test:desktop   # Desktop browsers only (Chrome, Edge, Firefox, WebKit)
-npm run test:mobile    # Mobile only (real Android + iOS devices)
+npm run baseline        # First run ever — marks this build as the baseline
+npm test                # Every run after — compares against the baseline
+npm run test:desktop    # Desktop browsers only (Chrome, Edge, Firefox, WebKit)
+npm run test:mobile     # Mobile only (real Android + iOS devices)
 ```
 
 Each run prints a LambdaTest job per capability; snapshots land in the
@@ -89,16 +90,64 @@ page × browser/device combination in one command. `LT_USERNAME` /
 authenticating and uploading results to the SmartUI dashboard — the
 browsers themselves run locally on your machine).
 
+## Baseline vs. comparison (how SmartUI diffing works)
+
+SmartUI compares builds within a **project**, not within a single run:
+
+1. **First run ever for the project** → SmartUI has nothing to diff against,
+   so it automatically becomes the **baseline**. Run either:
+   ```bash
+   npm run baseline   # same as `npm test`, but explicitly marks this build baseline
+   ```
+2. **Every run after that** → run the normal command:
+   ```bash
+   npm test           # or `npm run capture`
+   ```
+   SmartUI automatically diffs the new screenshots against the baseline and
+   shows a per-screen visual diff percentage in the dashboard. Nothing in
+   the test code changes between a baseline run and a comparison run — only
+   the `--markBaseline` flag differs.
+3. **UI intentionally changed and the diff is expected?** Re-run
+   `npm run baseline` to reset the baseline to the current state, or approve
+   the new baseline from inside the SmartUI dashboard's build view.
+
+## Push to GitHub + daily automated runs
+
+This repo includes `.github/workflows/smartui-daily.yml`, a GitHub Actions
+workflow that runs the full Mode A matrix (Chrome/Edge/Firefox/WebKit + real
+Android/iOS) every day at **09:00 IST (03:30 UTC)**, and can also be
+triggered manually from the Actions tab (with an option to mark that run as
+the new baseline instead of comparing).
+
+**One-time setup after pushing:**
+
+1. In the GitHub repo → **Settings → Secrets and variables → Actions →
+   Secrets**, add:
+   - `LT_USERNAME`
+   - `LT_ACCESS_KEY`
+   - `PROJECT_TOKEN`
+2. (Optional) Under **Variables**, add `SAMPLE_URL` if you want to point at
+   an app other than the default.
+3. Trigger the **first** run manually from the Actions tab
+   (`workflow_dispatch`, tick "Mark this run's snapshots as the new
+   baseline") so the very first CI build becomes the baseline. After that,
+   the daily cron runs in comparison mode automatically.
+
+To change the schedule, edit the `cron` line in
+`.github/workflows/smartui-daily.yml` (cron is always UTC).
+
 ## Project layout
 
 ```
+.github/workflows/
+  smartui-daily.yml    # Daily cron (+ manual trigger) running the full matrix in CI
 config/
-  capabilities.js    # Mode A: the browser/OS/device/resolution matrix (code)
-  buildDriver.js      # Mode A: builds a remote WebDriver session for one capability
+  capabilities.js      # Mode A: the browser/OS/device/resolution matrix (code)
+  buildDriver.js       # Mode A: builds a remote WebDriver session for one capability
 test/
-  smartui.test.js     # Mode A: Mocha spec — navigates the app, takes SmartUI snapshots
-.smartui.json          # Mode B: web browsers + mobile devices + viewports (single JSON)
-smartui-web.json       # Mode B: list of URLs to capture
+  smartui.test.js      # Mode A: Mocha spec — navigates the app, takes SmartUI snapshots
+.smartui.json           # Mode B: web browsers + mobile devices + viewports (single JSON)
+smartui-web.json        # Mode B: list of URLs to capture
 .env.example
 ```
 

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "smartui -c .smartui.json exec -- mocha test/*.test.js --timeout 180000 --exit",
+    "baseline": "smartui -c .smartui.json --markBaseline exec -- mocha test/*.test.js --timeout 180000 --exit",
     "test:desktop": "cross-env SUITE=desktop smartui -c .smartui.json exec -- mocha test/*.test.js --timeout 180000 --exit",
     "test:mobile": "cross-env SUITE=mobile smartui -c .smartui.json exec -- mocha test/*.test.js --timeout 180000 --exit",
     "capture": "smartui -c .smartui.json capture smartui-web.json"
