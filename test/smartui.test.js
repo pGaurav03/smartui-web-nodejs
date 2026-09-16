@@ -22,7 +22,10 @@ const suite =
     : ALL;
 
 describe("SmartUI visual regression — sample web app", function () {
-  this.timeout(180000);
+  // Real-device allocation on LambdaTest's cloud can occasionally take a
+  // while (device queueing); keep headroom above the default so a slow
+  // allocation doesn't fail the whole suite.
+  this.timeout(300000);
 
   suite.forEach((capability) => {
     it(`captures snapshots on ${capability.testName}`, async function () {
